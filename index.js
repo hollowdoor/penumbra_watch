@@ -1,5 +1,10 @@
 var chokidar = require('chokidar');
 
+/*
+git remote add origin https://github.com/hollowdoor/penumbra_watch.git
+git push -u origin master
+*/
+
 module.exports = function(pen){
     return function(names, options, tasks){
 
