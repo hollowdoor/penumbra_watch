@@ -103,6 +103,27 @@ watch('.', {
 });
 ```
 
+Use with [browser-sync](https://browsersync.io/)
+------------------------------------------------
+
+```javascript
+var bs = require('browser-sync').create(),
+    reload = bs.reload,
+    pen = require('penumbra')(),
+    watch = require('penumbra-watch')(pen);
+
+pen.task('serve', function * (){
+    bs.init({server: '.'});
+    //Here callback functions, and penumbra tasks are mixed.
+    watch('.', reload, 'anotherTask', console.log.bind(console));
+});
+
+pen.task('anotherTask', function * (){
+    console.log('anotherTask is running');
+    /*... Do some stuff here.*/
+});
+```
+
 About
 -----
 
