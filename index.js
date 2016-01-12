@@ -19,6 +19,14 @@ module.exports = function(pen){
             tasks = Array.prototype.slice.call(arguments, 2);
         }
 
+        if(!tasks.length){
+            throw new Error('You need some tasks in the rest of the arguments of your watcher.');
+        }
+
+        if(!names.length){
+            throw new Error('You need some file names in the first argument of your watcher.');
+        }
+
         for(var i=0; i<tasks.length; i++){
             if(typeof tasks[i] === 'string'){
                 penTasks.push(tasks[i]);
