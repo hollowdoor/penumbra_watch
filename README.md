@@ -69,9 +69,9 @@ files can be one of these:
 
 `options` are the same as **chokidar**.
 
-The third argument can be a **callback, or a task string**.
+The rest of the arguments can be a **callback, or a task string**.
 
-If the third argument is a task then the rest of the arguments can be tasks.
+`penumbra` tasks will be run before callbacks.
 
 Look at [chokidar](https://www.npmjs.com/package/chokidar) to learn more.
 
@@ -119,6 +119,7 @@ pen.task('serve', function * (){
 });
 
 pen.task('anotherTask', function * (){
+    /*This task is run before the reload callback.*/
     console.log('anotherTask is running');
     /*... Do some stuff here.*/
 });
