@@ -9,10 +9,15 @@ module.exports = function(pen){
 
     pen = pen || null;
 
-    return function(names, options, tasks){
+    return function(names, options){
 
-        var watcher, penTasks = [], fnTasks = [];
-        if(typeof tasks === 'undefined'){
+        var watcher,
+            tasks,
+            penTasks = [],
+            fnTasks = [],
+            cwd = options.cwd || process.cwd();
+        
+        if(typeof options === 'function' || typeof options === 'string'){
             tasks = Array.prototype.slice.call(arguments, 1);
             options = {};
         }else{
@@ -38,14 +43,13 @@ module.exports = function(pen){
         watcher = chokidar.watch(names, options);
 
         if(tasks.length){
-            watch.on('all', function(changes){
-                var i=0;
-                for(i=0; i<fnTasks.length; i++){
-                    fnTasks(changes);
+            watcher.on('all', function(event, _path){
+                for(var i=0; i<fnTasks.length; i++){
+                    fnTasks[i](_path);
                 }
 
-                if(penTasks.length){
-                    pen.exec.apply(pen, tasks);
+                if(pen && penTasks.length){
+                    pen.exec.apply(pen, penTasks);
                 }
             });
         }
@@ -54,7 +58,6 @@ module.exports = function(pen){
         watcher.on('error', function(err){
             console.log('penumbra-watch error '+err.message);
         });
-
 
         return watcher;
     };
