@@ -16,7 +16,7 @@ module.exports = function(pen){
             penTasks = [],
             fnTasks = [],
             cwd = options.cwd || process.cwd();
-        
+
         if(typeof options === 'function' || typeof options === 'string'){
             tasks = Array.prototype.slice.call(arguments, 1);
             options = {};
@@ -32,26 +32,34 @@ module.exports = function(pen){
             throw new Error('You need some file names in the first argument of your watcher.');
         }
 
-        for(var i=0; i<tasks.length; i++){
-            if(typeof tasks[i] === 'string'){
-                penTasks.push(tasks[i]);
-            }else if(typeof tasks[i] === 'function'){
-                fnTasks.push(tasks[i]);
-            }
-        }
+
 
         watcher = chokidar.watch(names, options);
 
         if(tasks.length){
             watcher.on('all', function(event, _path){
-                for(var i=0; i<fnTasks.length; i++){
-                    fnTasks[i](_path);
-                }
+                var penTasks = [], fnTasks = [];
 
-                if(pen && penTasks.length){
-                    pen.exec.apply(pen, penTasks);
+                for(var i=0; i<tasks.length; i++){
+                    if(typeof tasks[i] === 'string'){
+                        penTasks.push(tasks[i]);
+                    }else if(typeof tasks[i] === 'function'){
+                        fnTasks.push(tasks[i]);
+                    }
                 }
+                if(pen && penTasks.length){
+                    pen.exec.apply(pen, penTasks).then(function(){
+                        runFN(fnTasks, _path);
+                    });
+                }               
+
             });
+        }
+
+        function runFN(fnTasks, _path){
+            for(var i=0; i<fnTasks.length; i++){
+                fnTasks[i](_path);
+            }
         }
 
 
