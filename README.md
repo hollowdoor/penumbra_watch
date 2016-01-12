@@ -42,6 +42,14 @@ watch('.', {
 watch('.', 'move', 'anotherTask');
 ```
 
+or
+
+```javascript
+watch('.', function(){
+
+}, /*... more functions, or penumbra tasks.*/);
+```
+
 Interface
 ---------
 

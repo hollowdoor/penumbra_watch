@@ -6,9 +6,12 @@ git push -u origin master
 */
 
 module.exports = function(pen){
+
+    pen = pen || null;
+
     return function(names, options, tasks){
 
-        var watcher;
+        var watcher, penTasks = [], fnTasks = [];
         if(typeof tasks === 'undefined'){
             tasks = Array.prototype.slice.call(arguments, 1);
             options = {};
@@ -16,17 +19,27 @@ module.exports = function(pen){
             tasks = Array.prototype.slice.call(arguments, 2);
         }
 
+        for(var i=0; i<tasks.length; i++){
+            if(typeof tasks[i] === 'string'){
+                penTasks.push(tasks[i]);
+            }else if(typeof tasks[i] === 'function'){
+                fnTasks.push(tasks[i]);
+            }
+        }
+
         watcher = chokidar.watch(names, options);
 
         if(tasks.length){
-            if(typeof tasks[0] === 'function'){
-                watcher.on('all', tasks[0]);
-            }else{
+            watch.on('all', function(changes){
+                var i=0;
+                for(i=0; i<fnTasks.length; i++){
+                    fnTasks(changes);
+                }
 
-                watcher.on('all', function(changes){
+                if(penTasks.length){
                     pen.exec.apply(pen, tasks);
-                });
-            }
+                }
+            });
         }
 
 
