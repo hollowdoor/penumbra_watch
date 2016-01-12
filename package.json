@@ -1,6 +1,6 @@
 {
   "name": "penumbra-watch",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Watch files for penumbra",
   "main": "index.js",
   "directories": {

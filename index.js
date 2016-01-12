@@ -51,7 +51,9 @@ module.exports = function(pen){
                     pen.exec.apply(pen, penTasks).then(function(){
                         runFN(fnTasks, _path);
                     });
-                }               
+                }else{
+                    runFN(fnTasks, _path);
+                }
 
             });
         }
